@@ -28,7 +28,7 @@
     </com.journeyapps.barcodescanner.DecoratedBarcodeView>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textViewScanResult"
         android:layout_below="@+id/barcodeScanner"
@@ -36,6 +36,7 @@
         android:textSize="15dp"
         android:textStyle="bold"
         android:text="@string/scan_result"
+        android:textDirection="anyRtl"
         android:visibility="gone" />
 
 </RelativeLayout>

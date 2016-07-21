@@ -60,14 +60,15 @@ public class BarcodeScannerHTTPActivity extends AsyncTask<String, Void, String> 
                 JSONArray arr = new JSONArray(result);
                 JSONObject jsonObject = arr.getJSONObject(0);
                 scanningResultTextView.setVisibility(View.VISIBLE);
-                String data = "Barcode        : " + jsonObject.getString("ItemCode") + "\n" +
-                        "Name           : " + jsonObject.getString("ItemName") +"\n" +
-                        "Unit Quantity  : " + jsonObject.getString("UnitQty") + "\n" +
-                        "Quantity       : " + jsonObject.getString("Quantity") + "\n" +
-                        "Unit of Measure: " + jsonObject.getString("UnitOfMeasure") + "\n" +
-                        "Is Weighted    : " + jsonObject.getString("bIsWeighted") + "\n" +
-                        "Qty in Pack    : " + jsonObject.getString("QtyInPackage") + "\n" +
-                        "Price          : " + jsonObject.getString("ItemPrice");
+                String data =
+                        context.getResources().getString(R.string.ItemCode) + jsonObject.getString("ItemCode") + "\n" +
+                                context.getResources().getString(R.string.ItemName) + jsonObject.getString("ItemName") + "\n" +
+                                context.getResources().getString(R.string.UnitQty) + jsonObject.getString("UnitQty") + "\n" +
+                                context.getResources().getString(R.string.Quantity) + jsonObject.getString("Quantity") + "\n" +
+                                context.getResources().getString(R.string.UnitOfMeasure) + jsonObject.getString("UnitOfMeasure") + "\n" +
+                                context.getResources().getString(R.string.bIsWeighted) + jsonObject.getString("bIsWeighted") + "\n" +
+                                context.getResources().getString(R.string.QtyInPackage) + jsonObject.getString("QtyInPackage") + "\n" +
+                                context.getResources().getString(R.string.ItemPrice) + jsonObject.getString("ItemPrice");
 
                 scanningResultTextView.setText(data);
             } catch (JSONException e) {

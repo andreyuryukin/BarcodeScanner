@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Scanner</string>
     <string name="scan_result">Scanning result</string>
+    <string name="ItemCode">קוד מוצר:</string>
+    <string name="ItemName">שם מוצר:</string>
+    <string name="UnitQty">כמות יחידות:</string>
+    <string name="Quantity">כמות:</string>
+    <string name="UnitOfMeasure">יחידת מידה:</string>
+    <string name="bIsWeighted">שקילה:</string>
+    <string name="QtyInPackage">כמות באריזה:</string>
+    <string name="ItemPrice">מחיר:</string>
 </resources>

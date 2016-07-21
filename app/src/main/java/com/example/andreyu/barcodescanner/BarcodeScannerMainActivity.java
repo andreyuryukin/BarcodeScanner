@@ -5,21 +5,27 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
+
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+
 import java.util.List;
 
 public class BarcodeScannerMainActivity extends AppCompatActivity {
 
     public DecoratedBarcodeView barcodeView;
     public Context context;
+    public String previousBarcode = "";
 
     public BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
-            new BarcodeScannerHTTPActivity(context).execute(result.getText());
+            if (!result.getText().equals(previousBarcode)) {
+                new BarcodeScannerHTTPActivity(context).execute(result.getText());
+                previousBarcode = result.getText();
+            }
         }
 
         @Override
