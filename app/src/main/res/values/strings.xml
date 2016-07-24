@@ -9,4 +9,5 @@
     <string name="bIsWeighted">שקילה:</string>
     <string name="QtyInPackage">כמות באריזה:</string>
     <string name="ItemPrice">מחיר:</string>
+    <string name="ItemNotFound">מוצר לא נמצא</string>
 </resources>
