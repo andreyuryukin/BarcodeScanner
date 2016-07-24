@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -79,10 +78,12 @@ public class BarcodeScannerHTTPActivity extends AsyncTask<String, Void, String> 
                 scanningResultTextView.setText(data);
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(context, "Error parsing JSON data.", Toast.LENGTH_LONG).show();
+                data = context.getResources().getString(R.string.ReadJSONProblem);
+                scanningResultTextView.setText(data);
             }
         } else {
-            Toast.makeText(context, "Couldn't get any JSON data.", Toast.LENGTH_LONG).show();
+            data = context.getResources().getString(R.string.CantGetJSON);
+            scanningResultTextView.setText(data);
         }
     }
 }
