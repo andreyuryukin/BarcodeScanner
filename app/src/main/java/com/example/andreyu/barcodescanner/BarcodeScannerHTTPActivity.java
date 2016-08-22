@@ -3,7 +3,7 @@ package com.example.andreyu.barcodescanner;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -18,11 +18,18 @@ import java.net.URL;
 public class BarcodeScannerHTTPActivity extends AsyncTask<String, Void, String> {
 
     private Context context;
-    public TextView scanningResultTextView;
+    public String barcode;
+    public ItemAdapter itemAdapter;
+    public ListView lvItems;
+    public TextView textViewTotal;
+    public float totalAmount = 0;
 
-    public BarcodeScannerHTTPActivity(Context context) {
+    public BarcodeScannerHTTPActivity(Context context, ItemAdapter adapter) {
         this.context = context;
-        scanningResultTextView = (TextView) ((Activity) context).findViewById(R.id.textViewScanResult);
+        itemAdapter = adapter;
+        lvItems = (ListView) ((Activity) context).findViewById(R.id.lvItems);
+        textViewTotal = (TextView) ((Activity) context).findViewById(R.id.textViewTotal);
+        lvItems.setAdapter(itemAdapter);
     }
 
     protected void onPreExecute() {
@@ -30,7 +37,7 @@ public class BarcodeScannerHTTPActivity extends AsyncTask<String, Void, String> 
 
     @Override
     protected String doInBackground(String... params) {
-        String barcode = params[0];
+        barcode = params[0];
         URL url;
         HttpURLConnection con;
         BufferedReader bufferedReader;
@@ -54,36 +61,27 @@ public class BarcodeScannerHTTPActivity extends AsyncTask<String, Void, String> 
 
     @Override
     protected void onPostExecute(String result) {
-        String data;
+        Item item;
         if (result != null) {
             try {
                 JSONArray arr = new JSONArray(result);
                 JSONObject jsonObjectStatus = arr.getJSONObject(0);
-                scanningResultTextView.setVisibility(View.VISIBLE);
                 if (jsonObjectStatus.getString("query_status").equals("success")) {
                     JSONObject jsonObject = arr.getJSONObject(1);
-                    data =
-                            context.getResources().getString(R.string.ItemCode) + jsonObject.getString("ItemCode") + "\n" +
-                                    context.getResources().getString(R.string.ItemName) + jsonObject.getString("ItemName") + "\n" +
-                                    context.getResources().getString(R.string.UnitQty) + jsonObject.getString("UnitQty") + "\n" +
-                                    context.getResources().getString(R.string.Quantity) + jsonObject.getString("Quantity") + "\n" +
-                                    context.getResources().getString(R.string.UnitOfMeasure) + jsonObject.getString("UnitOfMeasure") + "\n" +
-                                    context.getResources().getString(R.string.bIsWeighted) + jsonObject.getString("bIsWeighted") + "\n" +
-                                    context.getResources().getString(R.string.QtyInPackage) + jsonObject.getString("QtyInPackage") + "\n" +
-                                    context.getResources().getString(R.string.ItemPrice) + jsonObject.getString("ItemPrice");
-
+                    item = new Item(jsonObject.getString("ItemCode"), jsonObject.getString("ItemName"), Float.parseFloat(jsonObject.getString("ItemPrice")));
+                    totalAmount = BarcodeScannerMainActivity.addItemAmount(Float.parseFloat(jsonObject.getString("ItemPrice")));
+                    textViewTotal.setText(String.format("%.0f", totalAmount));
                 } else {
-                    data = context.getResources().getString(R.string.ItemNotFound);
+                    item = new Item(barcode, context.getResources().getString(R.string.ItemNotFound), 0);
                 }
-                scanningResultTextView.setText(data);
             } catch (JSONException e) {
                 e.printStackTrace();
-                data = context.getResources().getString(R.string.ReadJSONProblem);
-                scanningResultTextView.setText(data);
+                item = new Item("00000", context.getResources().getString(R.string.ReadJSONProblem), 0);
             }
         } else {
-            data = context.getResources().getString(R.string.CantGetJSON);
-            scanningResultTextView.setText(data);
+            item = new Item("00000", context.getResources().getString(R.string.CantGetJSON), 0);
         }
+        itemAdapter.add(item);
+        itemAdapter.notifyDataSetChanged();
     }
 }

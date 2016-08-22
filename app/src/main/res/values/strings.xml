@@ -1,15 +1,15 @@
 <resources>
-    <string name="app_name">Scanner</string>
-    <string name="scan_result">Scanning result</string>
+    <string name="app_name">סורק</string>
+    <string name="scan_button">התחל</string>
     <string name="ItemCode">קוד מוצר:</string>
     <string name="ItemName">שם מוצר:</string>
     <string name="UnitQty">כמות יחידות:</string>
-    <string name="Quantity">כמות:</string>
+    <string name="Quantity">1</string>
     <string name="UnitOfMeasure">יחידת מידה:</string>
     <string name="bIsWeighted">שקילה:</string>
     <string name="QtyInPackage">כמות באריזה:</string>
     <string name="ItemPrice">מחיר:</string>
-    <string name="ItemNotFound">מוצר לא נמצא</string>
+    <string name="ItemNotFound">מוצר לא נמצא:</string>
     <string name="ReadJSONProblem">בעיה בקריאת נתונים</string>
     <string name="CantGetJSON">לא התקבלנו נתונים</string>
 </resources>
