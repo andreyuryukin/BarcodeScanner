@@ -5,9 +5,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.KeyEvent;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,7 +31,7 @@ public class BarcodeScannerMainActivity extends AppCompatActivity {
     public ArrayList<Item> arrayOfItems;
     public ItemAdapter itemAdapter;
     public ListView lvItems;
-    public Button btnStartScan;
+    public ImageButton btnStartScan;
     public TextView textViewTotal;
     public static float totalAmount = 0;
 
@@ -55,10 +59,54 @@ public class BarcodeScannerMainActivity extends AppCompatActivity {
         arrayOfItems = new ArrayList<>();
         itemAdapter = new ItemAdapter(context, 0, arrayOfItems);
         lvItems = (ListView) ((Activity) context).findViewById(R.id.lvItems);
-        btnStartScan = (Button) findViewById(R.id.buttonScan);
+        registerForContextMenu(lvItems);
+        btnStartScan = (ImageButton) findViewById(R.id.buttonScan);
         lvItems.setAdapter(itemAdapter);
         textViewTotal = (TextView) findViewById(R.id.textViewTotal);
-        textViewTotal.setText(Float.toString(totalAmount));
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId() == R.id.lvItems) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            Object object = lvItems.getItemAtPosition(info.position);
+            Item item = (Item) object;
+            menu.setHeaderTitle(item.itemDescription);
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.item_menu_list, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem menuItem) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
+        Object object = lvItems.getItemAtPosition(info.position);
+        Item item = (Item) object;
+        switch (menuItem.getItemId()) {
+            case R.id.remove_item:
+                itemAdapter.remove(item);
+                totalAmount = removeItemAmount(item.itemPrice);
+                break;
+
+            case R.id.increase_item_quantity:
+                totalAmount = addItemAmount(item.itemPrice);
+                item.itemQuantity = item.itemQuantity + 1;
+                break;
+
+            case R.id.decrease_item_quantity:
+                totalAmount = removeItemAmount(item.itemPrice);
+                if (1 >= item.itemQuantity) {
+                    itemAdapter.remove(item);
+                } else {
+                    item.itemQuantity = item.itemQuantity - 1;
+                }
+                break;
+        }
+
+        itemAdapter.notifyDataSetChanged();
+        textViewTotal.setText(String.format("%.0f", totalAmount));
+        return super.onContextItemSelected(menuItem);
     }
 
     @Override
@@ -73,12 +121,12 @@ public class BarcodeScannerMainActivity extends AppCompatActivity {
         barcodeView.pause();
     }
 
-    public static float addItemAmount(float amount){
+    public static float addItemAmount(float amount) {
         totalAmount += amount;
         return totalAmount;
     }
 
-    public static float removeItemAmount(float amount){
+    public static float removeItemAmount(float amount) {
         totalAmount -= amount;
         return totalAmount;
     }
@@ -87,7 +135,6 @@ public class BarcodeScannerMainActivity extends AppCompatActivity {
         assert barcodeView != null;
         barcodeView.setVisibility(View.VISIBLE);
         btnStartScan.setVisibility(View.GONE);
-        textViewTotal.setVisibility(View.VISIBLE);
         barcodeView.decodeContinuous(callback);
     }
 

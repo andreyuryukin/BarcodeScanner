@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:barcode_scanner="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/remove_item"
+        android:title="@string/DeleteItem"
+        android:icon="@android:drawable/ic_delete"
+        barcode_scanner:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/edit_item"
+        android:title="@string/EditItem"
+        android:icon="@android:drawable/ic_menu_edit"
+        barcode_scanner:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/increase_item_quantity"
+        android:title="@string/IncreaseQuantity"
+        android:icon="@android:drawable/ic_input_add"
+        barcode_scanner:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/decrease_item_quantity"
+        android:title="@string/DecreaseQuantity"
+        android:icon="@android:drawable/ic_input_delete"
+        barcode_scanner:showAsAction="ifRoom"/>
+
+</menu>

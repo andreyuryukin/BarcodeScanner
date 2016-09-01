@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;
@@ -28,13 +27,11 @@ public class ItemAdapter extends ArrayAdapter<Item>{
         TextView tvItemName = (TextView) convertView.findViewById(R.id.tvItemName);
         TextView tvItemPrice = (TextView) convertView.findViewById(R.id.tvItemPrice);
         TextView tvItemQuantity = (TextView) convertView.findViewById(R.id.tvItemQuantity);
-        ImageButton imgBtnAdd = (ImageButton) convertView.findViewById(R.id.imageButtonAdd);
         // Populate the data into the template view using the data object
         tvItemBarcode.setText(item.itemBarcode);
         tvItemName.setText(item.itemDescription);
         tvItemPrice.setText(Float.toString(item.itemPrice));
-        tvItemQuantity.setText("1");
-        imgBtnAdd.setImageResource(R.drawable.add);
+        tvItemQuantity.setText(String.format("%.0f", item.itemQuantity));
         // Return the completed view to render on screen
         return convertView;
     }

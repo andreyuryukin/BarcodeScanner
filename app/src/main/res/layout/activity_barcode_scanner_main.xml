@@ -8,35 +8,37 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:textDirection="rtl"
-    tools:context="com.example.andreyu.barcodescanner.BarcodeScannerMainActivity">
+    tools:context="com.example.andreyu.barcodescanner.BarcodeScannerMainActivity"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingStart="@dimen/activity_horizontal_margin">
 
-    <Button
-        android:id="@+id/buttonScan"
-        android:layout_width="match_parent"
-        android:layout_height="92dp"
-        android:onClick="triggerScan"
-        android:text="@string/scan_button"
-        android:layout_alignParentTop="true"
-        android:drawableTop="@drawable/start"
-        android:layout_centerHorizontal="true" />
 
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:id="@+id/barcodeScanner"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="100dp"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/buttonScan"
         android:visibility="gone"
-        android:layout_marginTop="5dp"></com.journeyapps.barcodescanner.DecoratedBarcodeView>
+        android:layout_marginTop="5dp"/>
+
+    <include layout="@layout/item_barcode_scanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textViewTotal"
+        android:textDirection="rtl"
+        android:layout_marginTop="5dp"
+        android:visibility="gone"
+        android:id="@+id/include" />
 
     <ListView
         android:id="@+id/lvItems"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textViewTotal"
         android:textDirection="rtl"
-        android:layout_marginTop="5dp">
+        android:layout_below="@+id/include">
     </ListView>
 
     <TextView
@@ -49,7 +51,17 @@
         android:background="@drawable/traffic"
         android:layout_below="@+id/barcodeScanner"
         android:layout_centerHorizontal="true"
-        android:visibility="gone"
-        android:gravity="center_vertical|center_horizontal" />
+        android:gravity="center_vertical|center_horizontal"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/buttonScan"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/start"
+        android:onClick="triggerScan"
+        android:background="@android:color/white" />
 
 </RelativeLayout>

@@ -3,6 +3,7 @@ package com.example.andreyu.barcodescanner;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Comparator;
 
 public class BarcodeScannerHTTPActivity extends AsyncTask<String, Void, String> {
 
@@ -23,12 +25,15 @@ public class BarcodeScannerHTTPActivity extends AsyncTask<String, Void, String> 
     public ListView lvItems;
     public TextView textViewTotal;
     public float totalAmount = 0;
+    public View layout;
+    public boolean firstItem = true;
 
     public BarcodeScannerHTTPActivity(Context context, ItemAdapter adapter) {
         this.context = context;
         itemAdapter = adapter;
         lvItems = (ListView) ((Activity) context).findViewById(R.id.lvItems);
         textViewTotal = (TextView) ((Activity) context).findViewById(R.id.textViewTotal);
+        layout = ((Activity) context).findViewById(R.id.include);
         lvItems.setAdapter(itemAdapter);
     }
 
@@ -68,20 +73,31 @@ public class BarcodeScannerHTTPActivity extends AsyncTask<String, Void, String> 
                 JSONObject jsonObjectStatus = arr.getJSONObject(0);
                 if (jsonObjectStatus.getString("query_status").equals("success")) {
                     JSONObject jsonObject = arr.getJSONObject(1);
-                    item = new Item(jsonObject.getString("ItemCode"), jsonObject.getString("ItemName"), Float.parseFloat(jsonObject.getString("ItemPrice")));
+                    if(firstItem){
+                        textViewTotal.setVisibility(View.VISIBLE);
+                        layout.setVisibility(View.VISIBLE);
+                    }
+                    item = new Item(jsonObject.getString("ItemCode"), jsonObject.getString("ItemName"), Float.parseFloat(jsonObject.getString("ItemPrice")), 1);
                     totalAmount = BarcodeScannerMainActivity.addItemAmount(Float.parseFloat(jsonObject.getString("ItemPrice")));
                     textViewTotal.setText(String.format("%.0f", totalAmount));
                 } else {
-                    item = new Item(barcode, context.getResources().getString(R.string.ItemNotFound), 0);
+                    item = new Item(barcode, context.getResources().getString(R.string.ItemNotFound), 0, 0);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                item = new Item("00000", context.getResources().getString(R.string.ReadJSONProblem), 0);
+                item = new Item("00000", context.getResources().getString(R.string.ReadJSONProblem), 0, 0);
             }
         } else {
-            item = new Item("00000", context.getResources().getString(R.string.CantGetJSON), 0);
+            item = new Item("00000", context.getResources().getString(R.string.CantGetJSON), 0, 0);
         }
         itemAdapter.add(item);
+        itemAdapter.sort(new Comparator<Item>() {
+            @Override
+            public int compare(Item lhs, Item rhs) {
+                return lhs.itemBarcode.compareTo(rhs.itemBarcode);
+            }
+        });
         itemAdapter.notifyDataSetChanged();
+        firstItem = false;
     }
 }
