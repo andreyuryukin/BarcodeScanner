@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -45,7 +44,6 @@ public class BarcodeScannerMainActivity extends AppCompatActivity {
         @Override
         public void barcodeResult(BarcodeResult result) {
             if (!result.getText().equals(previousBarcode)) {
-                Log.v("callback", "previous=" + previousBarcode + " current=" + result.getText());
                 new BarcodeScannerHTTPActivity(context, itemAdapter).execute(result.getText());
                 previousBarcode = result.getText();
             }
